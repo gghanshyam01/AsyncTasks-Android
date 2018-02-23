@@ -36,12 +36,14 @@ public class MainActivity extends AppCompatActivity {
     protected String doInBackground(Void... voids) {
         for (int i = 1; i < 100000; i++) {
             try {
-                Thread.sleep(500);
+                if (i % 1000 == 0) {
+                    Thread.sleep(1000);
+                    publishProgress(i);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (i % 1000 == 0)
-                publishProgress(i);
+
         }
         return "All Done";
     }
@@ -50,7 +52,13 @@ public class MainActivity extends AppCompatActivity {
      @Override
      protected void onProgressUpdate(Integer... values) {
          super.onProgressUpdate(values);
-         res.append("" + values);
+         res.setText("" + values[values.length - 1]);
 
+     }
+
+     @Override
+     protected void onPostExecute(String s) {
+         super.onPostExecute(s);
+         res.setText(s);
      }
  }
